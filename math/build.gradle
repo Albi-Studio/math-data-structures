@@ -1,7 +1,5 @@
 plugins {
     id 'java'
-    id("net.ltgt.errorprone") version "2.0.2"
-
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -9,25 +7,15 @@ targetCompatibility = JavaVersion.VERSION_17
 
 dependencies {
 
-    implementation 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    implementation 'javax.json:javax.json-api'
-    implementation 'com.google.code.gson:gson'
+    implementation 'com.google.guava:guava'
 
-    /*Dev only start*/
-    errorprone("com.google.errorprone:error_prone_core")
-    errorprone("com.google.errorprone:error_prone_annotations:2.10.0")
-    errorprone("com.google.code.findbugs:jsr305:3.0.2")
-    errorprone("org.checkerframework:checker-qual:3.12.0")
-    errorproneJavac("com.google.errorprone:javac:9+181-r4173-1")
-    /*Dev only end*/
-
-    testImplementation ('org.junit.jupiter:junit-jupiter-api')
-    testImplementation ('org.junit.jupiter:junit-jupiter-engine')
-    testImplementation ('org.junit.jupiter:junit-jupiter-params')
-    testImplementation ('org.assertj:assertj-core')
-    testImplementation ('org.mockito:mockito-core')
-    testImplementation ('org.mockito:mockito-junit-jupiter')
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params'
+    testImplementation 'org.assertj:assertj-core'
+    testImplementation 'org.mockito:mockito-core'
+    testImplementation 'org.mockito:mockito-junit-jupiter'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
 }
 
 test {
@@ -39,6 +27,4 @@ test {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-    options.errorprone.disableWarningsInGeneratedCode = false
-    options.errorprone.enabled = true
 }
