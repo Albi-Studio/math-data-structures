@@ -18,18 +18,15 @@ public class PowerSetGeneratorTest {
         ImmutableSet<Integer> set = ImmutableSet.of(1, 2, 3);
         var cardinality = set.size();
 
-//        Set<Set<Integer>> powerSet = Sets.powerSet(set);
         Set<Set<Integer>> powerSet = PowerSetGenerator.generate(set);
         assertThat(powerSet).hasSize(1 << cardinality);
-
-
     }
 
     @Test
     @DisplayName("Should return singleton power set whose only element is the empty set")
     public void testGenerateSingletonEmptySet() {
-//        PowerSet powerSet = PowerSetGenerator.generate(new HashSet<>());
-//        assertThat(powerSet).hasSize(1);
+        Set<Set<Integer>> powerSet = PowerSetGenerator.generate(new HashSet<>());
+        assertThat(powerSet).hasSize(1);
     }
 
     @Test
