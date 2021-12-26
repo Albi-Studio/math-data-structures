@@ -11,7 +11,7 @@ public class PowerSetGenerator {
 
     public static <T> PowerSet<T> generate(Set<T> set) {
         if (set.isEmpty()) {
-            PowerSet<T> ret = new PowerSet<T>();
+            PowerSet<T> ret = new PowerSet<>();
             ret.add(set);
             return ret;
         }
@@ -19,9 +19,9 @@ public class PowerSetGenerator {
         T primeItem = set.iterator().next();
         Set<T> restOfSet = Sets.difference(set, ImmutableSet.of(primeItem));
         PowerSet<T> subPowerSet = generate(restOfSet);
-        Set<Set<T>> powerSetOfSubSetWithExcludedItem = addPrimeItemToSubPowerSet(subPowerSet, primeItem);
+        PowerSet<T> powerSetOfSubSetWithExcludedItem = addPrimeItemToSubPowerSet(subPowerSet, primeItem);
 
-        PowerSet<T> finalPowerSet = generate(new HashSet<>());
+        PowerSet<T> finalPowerSet = generate(new LinkedHashSet<>());
         finalPowerSet.addAll(subPowerSet);
         finalPowerSet.addAll(powerSetOfSubSetWithExcludedItem);
         return finalPowerSet;
@@ -30,7 +30,7 @@ public class PowerSetGenerator {
     private static <T> PowerSet<T> addPrimeItemToSubPowerSet(PowerSet<T> subPowerSet, T primeItem) {
         PowerSet<T> powerSet = new PowerSet<>(subPowerSet);
         for (Set<T> restOfSet : subPowerSet) {
-            Set<T> subsetWithElement = new HashSet<>(restOfSet);
+            Set<T> subsetWithElement = new LinkedHashSet<>(restOfSet);
             subsetWithElement.add(primeItem);
             powerSet.add(subsetWithElement);
         }
@@ -38,17 +38,17 @@ public class PowerSetGenerator {
     }
 
     private final static class PowerSet<T> extends AbstractSet<Set<T>> {
-        private transient HashMap<Set<T>, Object> map;
+        private final transient HashMap<Set<T>, Object> map;
         private static final Object PRESENT = new Object();
 
-        private PowerSet(Set<Set<T>> set) {
+        private PowerSet(PowerSet<T> set) {
             map = new HashMap<>(set.size());
             this.addAll(set);
         }
 
         public PowerSet() {
             map = new HashMap<>(1);
-            map.put(new HashSet<>(), PRESENT);
+            map.put(new LinkedHashSet<>(), PRESENT);
         }
 
         @Override
