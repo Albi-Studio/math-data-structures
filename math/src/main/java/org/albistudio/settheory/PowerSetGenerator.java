@@ -9,23 +9,27 @@ import java.util.*;
 public class PowerSetGenerator {
 
 
-    public static <T> Set<Set<T>> generate(Set<T> set) {
-        if (set.isEmpty()) return ImmutableSet.of(set);
+    public static <T> PowerSet<T> generate(Set<T> set) {
+        if (set.isEmpty()) {
+            PowerSet<T> ret = new PowerSet<T>();
+            ret.add(set);
+            return ret;
+        }
 
         T primeItem = set.iterator().next();
         Set<T> restOfSet = Sets.difference(set, ImmutableSet.of(primeItem));
-        Set<Set<T>> subPowerSet = generate(restOfSet);
+        PowerSet<T> subPowerSet = generate(restOfSet);
         Set<Set<T>> powerSetOfSubSetWithExcludedItem = addPrimeItemToSubPowerSet(subPowerSet, primeItem);
 
-        Set<Set<T>> finalPowerSet = new HashSet<>();
+        PowerSet<T> finalPowerSet = generate(new HashSet<>());
         finalPowerSet.addAll(subPowerSet);
         finalPowerSet.addAll(powerSetOfSubSetWithExcludedItem);
         return finalPowerSet;
     }
 
-    private static <T> PowerSet<T> addPrimeItemToSubPowerSet(Set<Set<T>> powerSetSubSetWithoutElement, T primeItem) {
-        PowerSet<T> powerSet = new PowerSet<>(powerSetSubSetWithoutElement);
-        for (Set<T> restOfSet : powerSetSubSetWithoutElement) {
+    private static <T> PowerSet<T> addPrimeItemToSubPowerSet(PowerSet<T> subPowerSet, T primeItem) {
+        PowerSet<T> powerSet = new PowerSet<>(subPowerSet);
+        for (Set<T> restOfSet : subPowerSet) {
             Set<T> subsetWithElement = new HashSet<>(restOfSet);
             subsetWithElement.add(primeItem);
             powerSet.add(subsetWithElement);
@@ -33,13 +37,18 @@ public class PowerSetGenerator {
         return powerSet;
     }
 
-    private static class PowerSet<T> extends AbstractSet<Set<T>> {
+    private final static class PowerSet<T> extends AbstractSet<Set<T>> {
         private transient HashMap<Set<T>, Object> map;
         private static final Object PRESENT = new Object();
 
-        public PowerSet(Set<Set<T>> set) {
+        private PowerSet(Set<Set<T>> set) {
             map = new HashMap<>(set.size());
             this.addAll(set);
+        }
+
+        public PowerSet() {
+            map = new HashMap<>(1);
+            map.put(new HashSet<>(), PRESENT);
         }
 
         @Override
