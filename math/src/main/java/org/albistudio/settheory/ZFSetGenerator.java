@@ -11,11 +11,6 @@ import java.util.*;
  * 3 = { 0 , 1 , 2 } = { ∅ , { ∅ } , { ∅ , { ∅ } } }
  */
 
-/*
- * TIP - use power set https://www.baeldung.com/java-power-set-of-a-set
- *
- * generate(Set, n)
- * */
 public final class ZFSetGenerator {
     public static CustomSet generate(CustomSet parentSet, int n) {
         System.out.println("generate " + n);
